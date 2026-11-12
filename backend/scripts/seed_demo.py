@@ -34,7 +34,7 @@ def seed():
   if not db.get(MilestoneDataset,"demo-dataset"):db.add(MilestoneDataset(id="demo-dataset",name="城配里程碑 2026-11-09",events=make_events(),description="600票完整观测与3票质量反例 · UTC原始时间"))
   if not db.get(RouteGroup,"demo-group"):db.add(RouteGroup(id="demo-group",name="四站联运",stations=["城北","河西","临港","城南"],note="四站共同口径；分钟为单位"))
   db.commit()
-  if not db.get(DelayStudy,"demo-study"):db.add(DelayStudy(id="demo-study",name="四站 P95 尾延迟复核",dataset_id="demo-dataset",group_id="demo-group",config={"replicates":200,"seed":42,"tail_quantile":.95}))
+  if not db.get(DelayStudy,"demo-study"):db.add(DelayStudy(id="demo-study",name="四站 P95 尾延迟复核",dataset_id="demo-dataset",group_id="demo-group",config={"replicates":200,"seed":42,"tail_quantile":.95,"resample_scope":"pooled"}))
   db.commit()
   if not db.get(DelayRun,"demo-run"):db.add(DelayRun(id="demo-run",study_id="demo-study",status="queued",result={},error=""));db.commit();compute(db,"demo-run")
   if not db.get(ActionReview,"demo-review"):db.add(ActionReview(id="demo-review",run_id="demo-run",action="先复核临港交接与末端离散度，再做分线路分层分析；不直接据此归责。",state="approved",reviewer="admin@delay.demo"))

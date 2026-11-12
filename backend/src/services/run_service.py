@@ -22,7 +22,7 @@ def compute(db,run_id):
  row.status="running";db.commit()
  try:
   study=db.get(DelayStudy,row.study_id);dataset=db.get(MilestoneDataset,study.dataset_id);group=db.get(RouteGroup,study.group_id)
-  paired=summarize(dataset.events,group.stations);tail=attribute(paired.pop("matrix"),**study.config)
+  paired=summarize(dataset.events,group.stations);stations=[r["station"] for r in paired["rows"]];tail=attribute(paired.pop("matrix"),stations=stations,required_stations=group.stations,**study.config)
   row.result={**paired,"tail":tail,"dataset_name":dataset.name,"group_name":group.name,"valid_count":len(paired["rows"]),"rejected_count":len(paired["rejected"])};row.status="completed"
  except Exception as e:row.status="failed";row.error=str(e)[:1000]
  db.commit()
